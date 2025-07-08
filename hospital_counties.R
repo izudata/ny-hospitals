@@ -51,6 +51,31 @@ sqldf("SELECT [Hospital.County],
       ")
 
 
+# Load the survival package
+library(survival)
+
+# Get Average age by ph.karno for time between 500 and 1000
+sqldf("SELECT AVG(age), `ph.karno`
+      FROM lung
+      WHERE time < 1000 AND time > 500
+      GROUP BY `ph.karno`
+      ORDER BY `ph.karno`
+      ")
+
+# Assign the lung dataset to a variable
+lung2 <- sqldf("SELECT * FROM lung")
+
+# lung3 <- sqldf("UPDATE lung2
+#            SET Age = 70 WHERE Age < 80")
+
+
+# Update the record where patient's age is between 70 and 80 in a new column Age2
+lung3 <- sqldf("SELECT *, CASE WHEN (age>=70 and age<80) THEN 70 END AS Age2
+                FROM lung2")
+
+# View the first 10 rows of the updated dataset
+sqldf("SELECT * FROM lung3
+      WHERE Age >= 70 LIMIT 10")
 
 
 
